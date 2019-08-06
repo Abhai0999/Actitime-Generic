@@ -5,10 +5,12 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Reporter;
 
-public class BrowserFactory {
-WebDriver driver;
-	public void LaunchBrowser(String Browser)
+public class BrowserFactory 
+{
+
+	public static WebDriver LaunchBrowser(String Browser)
 	{
+		WebDriver driver=null;
 		if (Browser.equalsIgnoreCase("Chrome")) 
 		{
 		System.setProperty("webdriver.chrome.driver", "./exefiles/chromedriver.exe");
@@ -21,6 +23,7 @@ WebDriver driver;
 			driver=new FirefoxDriver();
 			Reporter.log("Firefox Launched",true);
 		}
+		return driver;
 		
 	}
 }
