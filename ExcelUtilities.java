@@ -5,9 +5,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
@@ -24,30 +26,54 @@ public ExcelUtilities(String filepath)
 {
 	this.filepath=filepath;
 }
+/**
+ * @author Abhishek
+ * @param sheetname
+ * @param row
+ * @param cell
+ * @return String
+ */
 
-public void ReadData(String sheetname,int row,int cell) throws EncryptedDocumentException, IOException
+public  String ReadData(String sheetname,int row,int cell)
 {
-String value=null;
-FileInputStream fis =new FileInputStream(new File(filepath));
-Workbook wb = WorkbookFactory.create(fis);
-Cell cl = wb.getSheet(sheetname).getRow(row).getCell(cell);
-switch (cl.getCellType()) 
+	String value=null;
+try {
+	
+	FileInputStream fis =new FileInputStream(new File(filepath));
+	Workbook wb = WorkbookFactory.create(fis);
+	Cell cl = wb.getSheet(sheetname).getRow(row).getCell(cell);
+	switch (cl.getCellType()) 
+	{
+	case STRING:
+		value=cl.getStringCellValue();
+		//System.out.println(value);
+		break;
+	case NUMERIC:
+		if (DateUtil.isCellDateFormatted(cl)) 
+		{
+		SimpleDateFormat sdf= new SimpleDateFormat("dd-mm-yyyy");	
+		value=sdf.format(cl.getDateCellValue());
+		}
+		else
+		{
+			Long longvalue = (long) cl.getNumericCellValue();
+			value=Long.toString(longvalue);	
+		}
+		break;
+	case BOOLEAN:
+		boolean bool = cl.getBooleanCellValue();
+		value=Boolean.toString(bool);
+		break;
+	default:
+		break;
+	}
+} 
+catch (EncryptedDocumentException e) 
 {
-case STRING:
-	
-	
-	break;
-case NUMERIC:
-	
-	
-	break;
-case BOOLEAN:
-	
-	
-	break;
 
-default:
-	break;
 }
+catch (IOException e) {
 }
-}
+return value;
+
+}}
