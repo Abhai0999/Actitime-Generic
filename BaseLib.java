@@ -9,7 +9,8 @@ import org.testng.annotations.Parameters;
 
 public class BaseLib 
 {
-WebDriver driver;
+public static WebDriver driver;
+
 @BeforeMethod
 @Parameters ({"Browser","BaseURL"})
 public void precondition(String Browser,String BaseURL)
@@ -18,8 +19,8 @@ public void precondition(String Browser,String BaseURL)
 	driver.manage().window().maximize();
 	driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 	driver.get(BaseURL);
-	Reporter.log(Browser +" Browser lauched", true);
 }
+
 @AfterMethod
 public void postCondition()
 {
